@@ -3,7 +3,7 @@
 // npm run test Potion
 const Potion = require('../lib/Potion'); //<==== this used to Import the Potion() constructor into the rest, by making Potion as a usable variable.
 jest.mock('../lib/Potion');
-console.log(new Potion());
+// console.log(new Potion());
 
 const Player = require('../lib/Player');
 
@@ -56,5 +56,32 @@ test("subtracts from player's health", () => {
     expect(player.health).toBe(oldHealth - 5);
     player.reduceHealth(99999);
     expect(player.health).toBe(0);
+});
+
+test("gets player's attack value", () => {
+    const player = new Player('Dave');
+    player.strength = 10;
+
+    expect(player.getAttackValue()).toBeGreaterThanOrEqual(5);
+    expect(player.getAttackValue()).toBeLessThanOrEqual(15);
+});
+
+test('adds a potion to the inventory', () => {
+    const player = new Player('Dave');
+    const oldCount = player.inventory.length;
+
+    player.addPotion(new Potion());
+
+    expect(player.inventory.length).toBeGreaterThan(oldCount);
+});
+
+test('uses a potion from inventory', () => {
+    const player = new Player('Dave');
+    player.inventory = [new Potion(), new Potion(), new Potion()];
+    const oldCount = player.inventory.length;
+
+    player.usePotion(1);
+
+    expect(player.inventory.length).toBeLessThan(oldCount);
 });
 
